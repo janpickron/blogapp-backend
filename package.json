@@ -1,0 +1,11 @@
+{
+  "name": "blogapp-backend",
+  "version": "1.0.0",
+  "description": "a simple es5 API with full CRUD writing to a local JSON file",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Janice Pickron",
+  "license": "ISC"
+}
