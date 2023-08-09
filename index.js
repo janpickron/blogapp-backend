@@ -7,7 +7,7 @@ const fs = require("fs");
 
 const app = express();
 // allows us to receive JSON objects
- app.use(express.json())
+app.use(express.json());
 
 app.listen(port, () => {
   console.log(`Console.log - Example app listening on port ${port}!`);
@@ -17,13 +17,13 @@ app.listen(port, () => {
 function handleJsonFileUpdate() {
   const jsonMenuData = JSON.stringify(menuData); // convert to JSON
   // adding a menu item to database
-  fs.writeFile('menu-items.json', jsonMenuData, err => console.log(err));
+  fs.writeFile("menu-items.json", jsonMenuData, (err) => console.log(err));
 }
 
 //  GET - reading data
 app.get("/", (req, res) => {
   res.send(
-    `Hello Jan! two I added another sentence on port ${port} on the browser.`
+    `Hello Jan! I added another sentence on port ${port} on the browser.`
   );
 });
 
@@ -34,12 +34,24 @@ app.get("/", (req, res) => {
 // POST - add  data
 app.post("/", (req, res) => {
   menuData.push(req.body);
-  handleJsonFileUpdate()
-  console.log(`${menuData}`)
-  res.send(menuData)
+  handleJsonFileUpdate();
+  res.send(menuData);
+  console.log('successfully updated')
 });
-console.log("Console.log here");
 
+// PUT - update
+app.put("/", (req, res) => {
+  // get the title from req query and find item on array
+  const itemFound = menuData.find(
+    (eachItem) => eachItem.title === req.query.title
+  );
+  // find the index of selected menu item
+  const indexOfItem = menuData.indexOf(itemFound);
+  // replace the selected menu item with new update in the req.body of ThunderClient
+  menuData.splice(indexOfItem, 1, req.body);
+  handleJsonFileUpdate();
+  res.send(menuData);
+});
 // const http = require("http")
 // const hostname = "127.0.0.1"
 // const port = 3000
