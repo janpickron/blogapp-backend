@@ -7,40 +7,27 @@ const fs = require("fs");
 
 const app = express();
 // allows us to receive JSON objects
-app.use(express.json)
+ app.use(express.json())
 
 app.listen(port, () => {
   console.log(`Console.log - Example app listening on port ${port}!`);
 });
 
-// const server = http.createServer((req,res) => {
-//     if (req.url === '/') {
-//         res.write('Hello World')
-//         res.end()
-//     }
-
-//     if (req.url === '/api/courses') {
-//         res.write(JSON.stringify([1, 2, 3]))
-//         res.end()
-//     }
-// })
-// server.listen(3000)
-
 // WRITE DATA into menu-items.json file
 function handleJsonFileUpdate() {
   const jsonMenuData = JSON.stringify(menuData); // convert to JSON
   // adding a menu item to database
-  fs.writeFile("menu-items.json", jsonMenuData, err => console.log(err));
+  fs.writeFile('menu-items.json', jsonMenuData, err => console.log(err));
 }
 
 //  GET - reading data
 app.get("/", (req, res) => {
   res.send(
-    `Hello Jan! sending to the browser. I added another sentence on port ${port}.`
+    `Hello Jan! two I added another sentence on port ${port} on the browser.`
   );
 });
 
-app.get("/menu", (req, res) => {
+app.get("/", (req, res) => {
   res.send(menuData);
 });
 
@@ -48,6 +35,7 @@ app.get("/menu", (req, res) => {
 app.post("/", (req, res) => {
   menuData.push(req.body);
   handleJsonFileUpdate()
+  console.log(`${menuData}`)
   res.send(menuData)
 });
 console.log("Console.log here");
@@ -65,3 +53,17 @@ console.log("Console.log here");
 // server.listen(port, hostname, function (){
 //     console.log(`Server running at http://${hostname}:${port}/`)
 // })
+
+// ------------------------------
+// const server = http.createServer((req,res) => {
+//     if (req.url === '/') {
+//         res.write('Hello World')
+//         res.end()
+//     }
+
+//     if (req.url === '/api/courses') {
+//         res.write(JSON.stringify([1, 2, 3]))
+//         res.end()
+//     }
+// })
+// server.listen(3000)
