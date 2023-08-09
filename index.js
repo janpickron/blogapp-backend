@@ -1,8 +1,17 @@
-const express = require('express')
-const app = express()
-const port = process.env.PORT || 3000
-const http = require('http')
-const menuData = require('./menu-items.json')
+const express = require("express");
+
+const port = process.env.PORT || 3000;
+const http = require("http");
+const menuData = require("./menu-items.json");
+const fs = require("fs");
+
+const app = express();
+// allows us to receive JSON objects
+app.use(express.json)
+
+app.listen(port, () => {
+  console.log(`Console.log - Example app listening on port ${port}!`);
+});
 
 // const server = http.createServer((req,res) => {
 //     if (req.url === '/') {
@@ -17,24 +26,31 @@ const menuData = require('./menu-items.json')
 // })
 // server.listen(3000)
 
-// allows us to receive JSON objects
-// app.use(express.json)
+// WRITE DATA into menu-items.json file
+function handleJsonFileUpdate() {
+  const jsonMenuData = JSON.stringify(menuData); // convert to JSON
+  // adding a menu item to database
+  fs.writeFile("menu-items.json", jsonMenuData, err => console.log(err));
+}
 
-app.get('/', (req, res) => {
-   res.send(`Hello Janice! sending to the browser. Now I added another sentence on port ${port}.`)
-})
+//  GET - reading data
+app.get("/", (req, res) => {
+  res.send(
+    `Hello Jan! sending to the browser. I added another sentence on port ${port}.`
+  );
+});
 
-app.get('/menu', (req, res) => {
-    res.send(menuData)
- })
+app.get("/menu", (req, res) => {
+  res.send(menuData);
+});
 
-app.listen(port, () => {
-    console.log(`Console.log - Example app listening on port ${port}!`)
-})
-
-console.log('Console.log here')
-
-
+// POST - add  data
+app.post("/", (req, res) => {
+  menuData.push(req.body);
+  handleJsonFileUpdate()
+  res.send(menuData)
+});
+console.log("Console.log here");
 
 // const http = require("http")
 // const hostname = "127.0.0.1"
