@@ -2,7 +2,7 @@ const express = require('express')
 const app = express()
 const port = process.env.PORT || 3000
 const http = require('http')
-const menuDate = require('.menu-item.json')
+const menuData = require('./menu-items.json')
 
 // const server = http.createServer((req,res) => {
 //     if (req.url === '/') {
@@ -23,6 +23,10 @@ const menuDate = require('.menu-item.json')
 app.get('/', (req, res) => {
    res.send(`Hello Janice! sending to the browser. Now I added another sentence on port ${port}.`)
 })
+
+app.get('/menu', (req, res) => {
+    res.send(menuData)
+ })
 
 app.listen(port, () => {
     console.log(`Console.log - Example app listening on port ${port}!`)
