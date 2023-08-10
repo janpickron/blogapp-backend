@@ -10,7 +10,7 @@ const app = express();
 app.use(express.json());
 
 app.listen(port, () => {
-  console.log(`Console.log - Example app listening on port ${port}!`);
+  console.log(`Console.log - App listening on port ${port}.`);
 });
 
 // WRITE DATA into menu-items.json file
@@ -23,11 +23,11 @@ function handleJsonFileUpdate() {
 //  GET - reading data
 app.get("/", (req, res) => {
   res.send(
-    `Hello Jan! I added another sentence on port ${port} on the browser.`
+    `G day Janice. Checking another request on port ${port} on the browser.`
   );
 });
 
-app.get("/", (req, res) => {
+app.get("/menu", (req, res) => {
   res.send(menuData);
 });
 
@@ -36,10 +36,10 @@ app.post("/", (req, res) => {
   menuData.push(req.body);
   handleJsonFileUpdate();
   res.send(menuData);
-  console.log('successfully updated')
+  console.log('Added')
 });
 
-// PUT - update
+// PUT - update a menu item by title
 app.put("/", (req, res) => {
   // get the title from req query and find item on array
   const itemFound = menuData.find(
@@ -51,31 +51,25 @@ app.put("/", (req, res) => {
   menuData.splice(indexOfItem, 1, req.body);
   handleJsonFileUpdate();
   res.send(menuData);
+  console.log('Updated')
 });
-// const http = require("http")
-// const hostname = "127.0.0.1"
-// const port = 3000
 
-// const server = http.createServer(function (req, res){
-//     res.writeHead(200, {"Content-Type": "text/plain"})
+// DELETE  - delete a menu item by title
+app.delete('/', (req, res) => {
+   const itemFound = menuData.find(eachItem => eachItem.title === req.query.title)
 
-//     res.end("Hello World\n")
-// })
+   const indexOfItem = menuData.indexOf(itemFound)
+    menuData.splice(indexOfItem, 1)
+    handleJsonFileUpdate()
+    res.send(menuData)
+    console.log('Deleted')
+})
 
-// server.listen(port, hostname, function (){
-//     console.log(`Server running at http://${hostname}:${port}/`)
-// })
-
-// ------------------------------
-// const server = http.createServer((req,res) => {
-//     if (req.url === '/') {
-//         res.write('Hello World')
-//         res.end()
-//     }
-
-//     if (req.url === '/api/courses') {
-//         res.write(JSON.stringify([1, 2, 3]))
-//         res.end()
-//     }
-// })
-// server.listen(3000)
+// DELETE all menu items
+app.delete('/deleteAll', (req, res) => {
+    // convert to JSON
+    const jsonMenuData = JSON.stringify([])
+    fs.writeFile('menu-items.json', jsonMenuData, err => console.log(err))
+    res.sendStatus(menuData)
+    console.log('All menu items are empty.')
+})
