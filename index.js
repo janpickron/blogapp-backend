@@ -10,7 +10,8 @@ const app = express();
 app.use(express.json());
 
 app.listen(port, () => {
-  console.log(`Console.log - App listening on port ${port}.`);
+  console.log(`App listening on port ${port}.`);
+  console.log('Waiting for the activity')
 });
 
 // WRITE DATA into menu-items.json file
@@ -25,6 +26,7 @@ app.get("/", (req, res) => {
   res.send(
     `G day Janice. Checking another request on port ${port} on the browser.`
   );
+  console.log('Reading data')
 });
 
 app.get("/menu", (req, res) => {
