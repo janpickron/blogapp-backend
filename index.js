@@ -1,6 +1,6 @@
 const express = require("express");
 
-const port = process.env.PORT || 5500;
+const port = process.env.PORT || 4040;
 const menuData = require("./menu-items.json");
 const fs = require("fs");
 
