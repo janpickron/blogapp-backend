@@ -1,16 +1,16 @@
 const express = require("express");
-
 const port = process.env.PORT || 4040;
 const menuData = require("./menu-items.json");
 const fs = require("fs");
-
+const cors = require("cors");
 const app = express();
+
 // allows us to receive JSON objects
 app.use(express.json());
-
+// app.use(cors());
 app.listen(port, () => {
-  console.log(`App listening on port ${port}.`);
-  console.log('Waiting for the activity')
+  console.log(`API listening on port ${port}.`);
+  console.log("Waiting for the activity");
 });
 
 // WRITE DATA into menu-items.json file
@@ -25,7 +25,7 @@ app.get("/", (req, res) => {
   res.send(
     `G day Janice. Checking another request on port ${port} on the browser.`
   );
-  console.log('Reading data')
+  console.log("Reading data");
 });
 
 app.get("/menu", (req, res) => {
@@ -37,7 +37,7 @@ app.post("/", (req, res) => {
   menuData.push(req.body);
   handleJsonFileUpdate();
   res.send(menuData);
-  console.log('Added')
+  console.log("Added");
 });
 
 // PUT - update a menu item by title
@@ -52,25 +52,27 @@ app.put("/", (req, res) => {
   menuData.splice(indexOfItem, 1, req.body);
   handleJsonFileUpdate();
   res.send(menuData);
-  console.log('Updated')
+  console.log("Thank you for updating menu item");
 });
 
 // DELETE  - delete a menu item by title
-app.delete('/', (req, res) => {
-   const itemFound = menuData.find(eachItem => eachItem.title === req.query.title)
+app.delete("/", (req, res) => {
+  const itemFound = menuData.find(
+    (eachItem) => eachItem.title === req.query.title
+  );
 
-   const indexOfItem = menuData.indexOf(itemFound)
-    menuData.splice(indexOfItem, 1)
-    handleJsonFileUpdate()
-    res.send(menuData)
-    console.log('Deleted')
-})
+  const indexOfItem = menuData.indexOf(itemFound);
+  menuData.splice(indexOfItem, 1);
+  handleJsonFileUpdate();
+  res.send(menuData);
+  console.log("Deleted");
+});
 
 // DELETE all menu items
-app.delete('/deleteAll', (req, res) => {
-    // convert to JSON
-    const jsonMenuData = JSON.stringify([])
-    fs.writeFile('menu-items.json', jsonMenuData, err => console.log(err))
-    res.sendStatus(menuData)
-    console.log('All menu items are empty.')
-})
+app.delete("/deleteAll", (req, res) => {
+  // convert to JSON
+  const jsonMenuData = JSON.stringify([]);
+  fs.writeFile("menu-items.json", jsonMenuData, (err) => console.log(err));
+  res.sendStatus(menuData);
+  console.log("All menu items are empty.");
+});
