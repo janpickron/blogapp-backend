@@ -4,13 +4,12 @@ const menuData = require("./menu-items.json");
 const fs = require("fs");
 const cors = require("cors");
 const app = express();
-
+app.use(cors());
 // allows us to receive JSON objects
 app.use(express.json());
-// app.use(cors());
+
 app.listen(port, () => {
   console.log(`API listening on port ${port}.`);
-  console.log("Waiting for the activity");
 });
 
 // WRITE DATA into menu-items.json file
