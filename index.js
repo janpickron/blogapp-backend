@@ -21,9 +21,7 @@ function handleJsonFileUpdate() {
 
 //  GET - reading data
 app.get("/", (req, res) => {
-  res.send(
-    `G day Janice. Checking another request on port ${port} on the browser.`
-  );
+  res.send('Accessing my API on port 4040');
   console.log("Reading data");
 });
 
