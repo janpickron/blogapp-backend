@@ -26,7 +26,7 @@ app.listen(port, () => {
   console.log(`API listening on port ${port}.`);
 });
 
-//  GET - reading data
+//  GET - reading post data
 app.get("/post", async (req, res) => {
   try {
     const allPosts = await post.find().toArray();
@@ -53,19 +53,29 @@ app.post("/post", async (req, res) => {
   }
 });
 
-// PUT - update a menu item by title
-app.put("/", (req, res) => {
-  // get the title from req query and find item on array
-  const itemFound = post.find(
-    (eachItem) => eachItem.title === req.query.title
-  );
-  // find the index of selected menu item
-  const indexOfItem = post.indexOf(itemFound);
-  // replace the selected menu item with new update in the req.body of ThunderClient
-  menuData.splice(indexOfItem, 1, req.body);
-  handleJsonFileUpdate();
-  res.send(post);
-  console.log("Thank you for updating menu item");
+// PUT - update a blog post by title
+app.put("/post", async (req, res) => {
+  try {
+  // filter the title from req query and get body from req.body
+  const filter = { title: req.query.title }
+  const update = { $set: req.body }
+  
+  const postFound = await post.updateOne(filter, update)
+  // use postFound.modifiedCount to check if any documents were modified during update process
+  // If modifiedCount is greater than 0, post was found and updated
+  if (postFound.modifiedCount > 0) {
+    console.log('Post title is found and content/date updated', req.body)
+    res.send("Post updated.")
+  }
+  // modifiedCount is 0, title was not found and  404 response sent
+  else {
+    console.log('Title is not found and it is not updated')
+    res.status(404).json({message: "Title is not found"})
+  } 
+} catch (error){
+    console.log("Error update post", error)
+    res.status(500).json({message: "Error update post"})
+  }
 });
 
 // DELETE  - delete a menu item by title
@@ -88,12 +98,3 @@ app.delete("/post", async (req, res) => {
     res.status(500).json({ message: "Error deleting item" });
   }
 });
-
-// // DELETE all menu items
-// app.delete("/deleteAll", (req, res) => {
-//   // convert to JSON
-//   const jsonMenuData = JSON.stringify([]);
-//   fs.writeFile("menu-items.json", jsonMenuData, (err) => console.log(err));
-//   res.sendStatus(menuData);
-//   console.log("All menu items are empty.");
-// });
