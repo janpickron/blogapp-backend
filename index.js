@@ -5,9 +5,11 @@ import cors from "cors";
 // get data from MongoDB as a client
 import { MongoClient } from "mongodb";
 // variable for MongoDB URI with SRV Connection Format
-const MONGO_URI =
-  "mongodb+srv://janpickron:12345@cluster0.cki3lkd.mongodb.net/";
-const client = new MongoClient(MONGO_URI);
+
+import mongo_connectionString from "./mongo_pwd.js";  // export default
+// import {mongo_connectionString} from "./mongo_pwd.js";  // named export
+// export from mongo_pwdÏ.js
+const client = new MongoClient(mongo_connectionString);
 // MongoDB database name 'blog'
 const db = client.db("blog");
 // MongoDB collection name 'post'
@@ -56,25 +58,25 @@ app.post("/post", async (req, res) => {
 // PUT - update a blog post by title
 app.put("/post", async (req, res) => {
   try {
-  // filter the title from req query and get body from req.body
-  const filter = { title: req.query.title }
-  const update = { $set: req.body }
-  
-  const postFound = await post.updateOne(filter, update)
-  // use postFound.modifiedCount to check if any documents were modified during update process
-  // If modifiedCount is greater than 0, post was found and updated
-  if (postFound.modifiedCount > 0) {
-    console.log('Post title is found and content/date updated', req.body)
-    res.send("Post updated.")
-  }
-  // modifiedCount is 0, title was not found and  404 response sent
-  else {
-    console.log('Title is not found and it is not updated')
-    res.status(404).json({message: "Title is not found"})
-  } 
-} catch (error){
-    console.log("Error update post", error)
-    res.status(500).json({message: "Error update post"})
+    // filter the title from req query and get body from req.body
+    const filter = { title: req.query.title };
+    const update = { $set: req.body };
+
+    const postFound = await post.updateOne(filter, update);
+    // use postFound.modifiedCount to check if any documents were modified during update process
+    // If modifiedCount is greater than 0, post was found and updated
+    if (postFound.modifiedCount > 0) {
+      console.log("Post title is found and content/date updated", req.body);
+      res.send("Post updated.");
+    }
+    // modifiedCount is 0, title was not found and  404 response sent
+    else {
+      console.log("Title is not found and it is not updated");
+      res.status(404).json({ message: "Title is not found" });
+    }
+  } catch (error) {
+    console.log("Error update post", error);
+    res.status(500).json({ message: "Error update post" });
   }
 });
 
