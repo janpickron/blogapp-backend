@@ -2,8 +2,13 @@
 import express from "express";
 // node.js package for providing a Connect/Express middleware that communicate with a browser
 import cors from "cors";
-
-import { getAllPosts, addNewPost, updatePost, deletePost } from './collections/post.js'
+// get all functions from post.js file
+import {
+  getAllPosts,
+  addNewPost,
+  updatePost,
+  deletePost,
+} from "./collections/post.js";
 
 // ENVIRONMENT VARIABLE
 const port = process.env.PORT || 4040;
