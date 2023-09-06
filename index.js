@@ -5,6 +5,7 @@ import cors from "cors";
 // get all functions from post.js file
 import {
   getAllPosts,
+  getID,
   addNewPost,
   updatePost,
   deletePost,
@@ -20,9 +21,10 @@ app.use(cors());
 app.use(express.json());
 
 app.get("/", getAllPosts);
+app.get('/single-post/:id', getID)
 app.post("/", addNewPost);
-app.put("/", updatePost);
-app.delete("/", deletePost);
+app.put("/single-post/:id", updatePost);
+app.delete("/single-post/:id", deletePost);
 
 app.listen(port, () => {
   console.log(`API listening on port ${port}.`);

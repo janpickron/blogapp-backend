@@ -1,3 +1,4 @@
+import { ObjectId } from "mongodb";
 import { db } from "../mongoDB_Utility.js";
 // MongoDB collection 'post'
 const post = db.collection("post");
@@ -13,12 +14,27 @@ export const getAllPosts = async (req, res) => {
   }
 };
 
+// get the unique id from API
+export const getID = async (req, res) => {
+  try {
+    const specialId = new ObjectId(req.params.id);
+    console.log('specialId from getID: ', specialId)
+    // find the id and grab the data
+    const itemFound = await post.findOne({ _id: specialId });
+  
+    res.send(itemFound);
+    console.log(itemFound)
+  } catch (error) {
+    res.status(500).json({ message: "Error reading ID" });
+  }
+};
+
 // POST - add new post data
 export const addNewPost = async (req, res) => {
   try {
     // add new post document
     const newPost = await post.insertOne(req.body);
-    res.status(201).json({ message: "New post created successfully" });
+    res.status(201).json({ message: "New post added successfully" });
 
     // something wrong with adding a new post document
   } catch (error) {
@@ -27,22 +43,28 @@ export const addNewPost = async (req, res) => {
   }
 };
 
-// PUT - update a blog post by title
+// PUT - update a blog post by id
 export const updatePost = async (req, res) => {
   try {
-    // filter the title from req query and get body from req.body
-    const filter = { title: req.query.title };
+    const specialId = new ObjectId(req.params.id);
+    // filter the id and get body from req.body
+    // const postId = req.params.id;
+    // const filter = { _id: postId };
+    const filter = { _id: specialId };
     const update = { $set: req.body };
-
-    const postFound = await post.updateOne(filter, update);
-    // use postFound.modifiedCount to check if any documents were modified during update process
-    // If modifiedCount is greater than 0, post was found and updated
-    if (postFound.modifiedCount > 0) {
-      res.send("Post updated.");
+    
+    const postFound = await post.findOneAndUpdate(filter, update);
+    // console.log("postId: " , postId)
+    console.log("filter:", filter)
+    console.log("update:", update)
+    console.log("postFound: ", postFound)
+    // use postFound to check if any documents were modified during update process
+    if (postFound) {
+      res.json("Post updated.");
     }
-    // modifiedCount is 0, title was not found and  404 response sent
+    // post is not found and  404 response sent
     else {
-      res.status(404).json({ message: "Title is not found" });
+      res.status(404).json({ message: "Post is not found" });
     }
   } catch (error) {
     res.status(500).json({ message: "Error update post" });
@@ -52,11 +74,13 @@ export const updatePost = async (req, res) => {
 // DELETE  - delete a menu item by title
 export const deletePost = async (req, res) => {
   try {
+     const specialId = new ObjectId(req.params.id);
     const itemToDelete = await post.findOneAndDelete({
-      title: req.query.title,
+        _id: specialId,
     });
 
-    if (itemToDelete.value) {
+    console.log("specialId from Delete: ", specialId)
+    if (itemToDelete) {
       // The deleted item is available in itemToDelete.value
       res.send("Deleted");
     } else {
