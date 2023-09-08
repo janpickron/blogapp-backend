@@ -18,12 +18,9 @@ export const getAllPosts = async (req, res) => {
 export const getID = async (req, res) => {
   try {
     const specialId = new ObjectId(req.params.id);
-    console.log('specialId from getID: ', specialId)
     // find the id and grab the data
     const itemFound = await post.findOne({ _id: specialId });
-  
     res.send(itemFound);
-    console.log(itemFound)
   } catch (error) {
     res.status(500).json({ message: "Error reading ID" });
   }
@@ -47,17 +44,10 @@ export const addNewPost = async (req, res) => {
 export const updatePost = async (req, res) => {
   try {
     const specialId = new ObjectId(req.params.id);
-    // filter the id and get body from req.body
-    // const postId = req.params.id;
-    // const filter = { _id: postId };
     const filter = { _id: specialId };
     const update = { $set: req.body };
-    
     const postFound = await post.findOneAndUpdate(filter, update);
-    // console.log("postId: " , postId)
-    console.log("filter:", filter)
-    console.log("update:", update)
-    console.log("postFound: ", postFound)
+
     // use postFound to check if any documents were modified during update process
     if (postFound) {
       res.json("Post updated.");
@@ -74,12 +64,11 @@ export const updatePost = async (req, res) => {
 // DELETE  - delete a menu item by title
 export const deletePost = async (req, res) => {
   try {
-     const specialId = new ObjectId(req.params.id);
+    const specialId = new ObjectId(req.params.id);
     const itemToDelete = await post.findOneAndDelete({
-        _id: specialId,
+      _id: specialId,
     });
 
-    console.log("specialId from Delete: ", specialId)
     if (itemToDelete) {
       // The deleted item is available in itemToDelete.value
       res.send("Deleted");
