@@ -13,7 +13,7 @@ export const getFindUser = async (req, res) => {
     // a user with provided email and password
 
     console.log("findUser is:" , userFound)
-    if (userFound && req.body.password === userFound.password) {
+    if (userFound && (req.body.password === userFound.password)) {
        console.log("User / password matched")
        res.send({isAuthenticated:true})
     } else {
