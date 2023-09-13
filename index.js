@@ -12,11 +12,7 @@ import {
 } from "./collections/post.js";
 
 // get all function from user-auth.js file
-import {
-  getFindUser,
-  addNewUser
-} from "./collections/user-auth.js";
-
+import { getFindUser, addNewUser } from "./collections/user-auth.js";
 
 // ENVIRONMENT VARIABLE
 const port = process.env.PORT || 4040;
@@ -28,12 +24,12 @@ app.use(cors());
 app.use(express.json());
 
 // API endpoints for User Authentication CRUD
-app.post("/login", getFindUser)
-app.post("/add-user", addNewUser)
+app.post("/login", getFindUser);
+app.post("/add-user", addNewUser);
 
 // API endpoints for Blog posts CRUD
 app.get("/", getAllPosts);
-app.get('/single-post/:id', getID)
+app.get("/single-post/:id", getID);
 app.post("/", addNewPost);
 app.put("/single-post/:id", updatePost);
 app.delete("/single-post/:id", deletePost);
