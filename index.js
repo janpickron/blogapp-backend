@@ -2,6 +2,8 @@
 import express from "express";
 // node.js package for providing a Connect/Express middleware that communicate with a browser
 import cors from "cors";
+// ENVIRONMENT VARIABLE 
+import 'dotenv/config'
 // get all functions from post.js file
 import {
   getAllPosts,

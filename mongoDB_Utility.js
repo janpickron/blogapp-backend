@@ -1,11 +1,7 @@
 // get data from MongoDB as a client
 import { MongoClient } from "mongodb";
+import 'dotenv/config'
 
-// variable for MongoDB URI with SRV Connection Format
-import mongo_connectionString from "./mongo_pwd.js"; // export default
-
-// import {mongo_connectionString} from "./mongo_pwd.js";  // named export
-// export from mongo_pwdÏ.js
-const client = new MongoClient(mongo_connectionString);
+const client = new MongoClient(process.env.MONGO_URI);
 // MongoDB database name 'blog'
 export const db = client.db("blog");
